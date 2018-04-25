@@ -1,47 +1,56 @@
 #! coding:utf-8
+
 import sys,os
 razdel = ['_',':',';']
+cute=[]
 def uniq(seq):
     seen = set()
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]
 
-def brute_words(words):
-    new_words = []
+def save(list1,arg):
+    o = open(arg,"w")
+    o.write("\n".join(list1))
+    o.close()
 
-    for i in words:
-        new_words.append(i)
-        new_words.append(i[0].upper() + i[1:])
-        new_words.append(i[0].upper() + i[1:-1] + i[-1].upper())
-        new_words.append(i.upper())
+def brute_words(spisok):
+    spisok2 = []
 
-    for j in spisok:
-        new_words.append(i + j)
-    for m in razdel:
-        new_words.append(j + m + i)
-        new_words.append(j + i)
-        new_words.append(i * 2 + j)
-        new_words.append(j * 2 + i)
-        new_words.append(i[0].upper() + i[1:] + j)
-        new_words.append(i[0].upper() + i[1:-1] + i[-1].upper() + j)
+    for i in spisok:
+        spisok2.append(i)
+        spisok2.append(i[0].upper()+i[1:])
+        spisok2.append(i[0].upper()+i[1:-1]+i[-1].upper())
+        spisok2.append(i.upper())
+        for j in spisok:
+            spisok2.append(i+j)
+            for m in razdel:
+                spisok2.append(j+m+i)
+            spisok2.append(j+i)
+            spisok2.append(i+i+j)
+            spisok2.append(j+j+i)
+            spisok2.append(i[0].upper()+i[1:]+j)
+            spisok2.append(i[0].upper()+i[1:-1]+i[-1].upper()+j)
+    return uniq(spisok2)
 
-   return uniq(new_words)
+def generate(spisok_file):
+    o = open(spisok_file,'r')
 
-def generate(words_file):
-    o = open(words_file, 'r')
+    spisok = o.read().splitlines()
 
-words = o.read().splitlines()
-for i in brute_words(words):
-    print(i)
+    for i in brute_words(spisok):
+        cute.append(i)
+        print(i)
 
 def main():
     try:
         argv1 = sys.argv[1]
         generate(argv1)
+        save(cute,sys.argv[2])
     except IndexError:
-        print("You need to define the file")
+        print("Нужно указать файл")
+
     except IOError:
-        print("File doesn't exist")
+        print("Нет такого файла")
 
 if __name__ == "__main__":
     main()

@@ -10,7 +10,7 @@ def anti(key, file): #Получение решения Captcha с Antigate
             data = AntiGate(key, file)
             return data
         except KeyboardInterrupt:
-            print("quiting")
+            print("quitting")
     except:
         anti(key, file)
 
